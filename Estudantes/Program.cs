@@ -1,7 +1,24 @@
+using AutoMapper;
+using Estudantes.Data;
+using Estudantes.Repositories;
+using Estudantes.Repositories.Interface;
+using Estudantes.Services;
+using Estudantes.Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+
+builder.Services.AddDbContext<StudentContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+IMapper mapper = Mapping.RegisterMaps().CreateMapper();
+builder.Services.AddSingleton(mapper);
 
 var app = builder.Build();
 

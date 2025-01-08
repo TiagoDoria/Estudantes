@@ -6,6 +6,6 @@
         public string Name { get; set; }
         public DateTime GraduationDate { get; set; }
         public string EducationalnstitutionId { get; set; }
-        public Educationalnstitution Educationalnstitution { get; set; }
+        public EducationalInstitution Educationalnstitution { get; set; }
     }
 }
