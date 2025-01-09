@@ -1,4 +1,5 @@
 ﻿using Estudantes.DTOs;
+using Estudantes.Models;
 using Estudantes.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,9 +20,11 @@ namespace Estudantes.Controllers
             return View(students);
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View();
+            var states = await _studentService.GetAllStatesAsync();
+            ViewBag.States = states;
+            return View(new StudentDTO());
         }
 
         [HttpPost]
@@ -83,6 +86,12 @@ namespace Estudantes.Controllers
 
             _studentService.DeleteAsync(id); 
             return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> GetCitiesByState(string stateId)
+        {
+            var cities = await _studentService.GetCitiesByStateAsync(stateId);
+            return Json(cities);
         }
     }
 }

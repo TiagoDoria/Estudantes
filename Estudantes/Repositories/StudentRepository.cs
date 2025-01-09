@@ -61,5 +61,15 @@ namespace Estudantes.Repositories
             }
 
         }
+
+        public async Task<IEnumerable<State>> GetAllStatesAsync()
+        {
+            return await _context.States.ToListAsync();
+        }
+
+        public async Task<IEnumerable<City>> GetCitiesByStateAsync(string stateId)
+        {
+            return await _context.Cities.Where(x => x.StateId == stateId).ToListAsync();
+        }
     }
 }

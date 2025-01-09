@@ -1,5 +1,69 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model Estudantes.DTOs.StudentDTO
+
 @{
+    ViewData["Title"] = "Cadastro de Estudante";
 }
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+<div class="container mt-5">
+    <h2>Cadastro de Estudante</h2>
+    <form asp-action="Create" method="post">
+        <div class="mb-3">
+            <label for="Cpf" class="form-label">CPF</label>
+            <input type="text" class="form-control" id="Cpf" name="Cpf" value="@Model.Cpf" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="State" class="form-label">Estado</label>
+            <select class="form-select" id="State" name="Address.City.StateId" required>
+                <option value="">Selecione um estado</option>
+                @foreach (var state in ViewBag.States)
+                {
+                    <option value="@state.Id">@state.Name</option>
+                }
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="City" class="form-label">Cidade</label>
+            <select class="form-select" id="City" name="Address.CityId" required>
+                <option value="">Selecione uma cidade</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="Description" class="form-label">Endereço</label>
+            <input type="text" class="form-control" id="Description" name="Address.Description" value="@Model.Address?.Description" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="CourseId" class="form-label">Curso</label>
+            <input type="text" class="form-control" id="CourseId" name="CourseId" value="@Model.CourseId" required />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Cadastrar</button>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#State").change(function () {
+            var stateId = $(this).val();
+            $("#City").empty();
+            $("#City").append('<option value="">Carregando...</option>');
+
+            if (stateId) {
+                $.getJSON('/Student/GetCities', { stateId: stateId }, function (data) {
+                    $("#City").empty();
+                    $("#City").append('<option value="">Selecione uma cidade</option>');
+                    $.each(data, function (index, city) {
+                        $("#City").append('<option value="' + city.id + '">' + city.name + '</option>');
+                    });
+                });
+            } else {
+                $("#City").append('<option value="">Selecione um estado primeiro</option>');
+            }
+        });
+    });
+</script>

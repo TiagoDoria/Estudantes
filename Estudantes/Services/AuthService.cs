@@ -64,7 +64,7 @@ namespace Estudantes.Services
             return responseDTO;
         }
 
-        public async Task<string> Register(RegistrationRequestDTO registrationRequestDTO)
+        public async Task<bool> Register(RegistrationRequestDTO registrationRequestDTO)
         {
             bool status = true;
             User user = new()
@@ -78,6 +78,7 @@ namespace Estudantes.Services
             try
             {
                 await _userManager.CreateAsync(user, registrationRequestDTO.Password);
+                return true;
             }
             catch (Exception e)
             {
@@ -85,7 +86,7 @@ namespace Estudantes.Services
             }
 
 
-            return "Error Encountered.";
+            return false;
         }    
     }
 }

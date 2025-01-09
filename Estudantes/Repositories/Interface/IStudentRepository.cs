@@ -10,5 +10,7 @@ namespace Estudantes.Repositories.Interface
         Task<IEnumerable<Student>> GetAllAsync();
         Task<Student> GetByIdAsync(string id);
         Task DeleteAsync(string id);
+        Task<IEnumerable<State>> GetAllStatesAsync();
+        Task<IEnumerable<City>> GetCitiesByStateAsync(string stateId);
     }
 }

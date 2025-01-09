@@ -5,10 +5,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
-namespace Estudantes.Migrations
+namespace Estudantes.Migrations.Student
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class initialStudent : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -26,7 +26,7 @@ namespace Estudantes.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "State",
+                name: "States",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -34,7 +34,7 @@ namespace Estudantes.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_State", x => x.Id);
+                    table.PrimaryKey("PK_States", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -69,9 +69,9 @@ namespace Estudantes.Migrations
                 {
                     table.PrimaryKey("PK_Cities", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Cities_State_StateId",
+                        name: "FK_Cities_States_StateId",
                         column: x => x.StateId,
-                        principalTable: "State",
+                        principalTable: "States",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -122,7 +122,7 @@ namespace Estudantes.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "State",
+                table: "States",
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
                 {
@@ -466,7 +466,7 @@ namespace Estudantes.Migrations
                 name: "EducationalInstitution");
 
             migrationBuilder.DropTable(
-                name: "State");
+                name: "States");
         }
     }
 }

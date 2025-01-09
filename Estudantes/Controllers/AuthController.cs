@@ -14,8 +14,7 @@ namespace Estudantes.Controllers
             _authService = authService;
         }
 
-        [HttpGet]
-        public IActionResult Login()
+        public IActionResult Index()
         {
             return View();
         }
@@ -42,7 +41,33 @@ namespace Estudantes.Controllers
             }
 
             ModelState.AddModelError(string.Empty, "Login inválido.");
-            return View(loginRequest);
+            return RedirectToAction("Index", "Auth");
+
+        }
+
+        public IActionResult Register()
+        {
+            return View(new RegistrationRequestDTO());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Register(RegistrationRequestDTO registrationRequestDTO)
+        {
+            if (ModelState.IsValid)
+            {
+                bool result = await _authService.Register(registrationRequestDTO);
+
+                if (result == true)
+                {
+                    return RedirectToAction("Login", "Auth");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Erro ao registrar o usuário. Tente novamente.");
+                }
+            }
+
+            return View(registrationRequestDTO);
         }
     }
 }

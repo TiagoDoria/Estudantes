@@ -14,6 +14,8 @@ namespace Estudantes.Data
         public DbSet<Student> Students { get; set; }
         public DbSet<Address> Address { get; set; }
         public DbSet<City> Cities { get; set; }
+        public DbSet<State> States { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

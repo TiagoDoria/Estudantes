@@ -96,5 +96,38 @@ namespace Estudantes.Services
             }
         }
 
+        public async Task<IEnumerable<CityDTO>> GetCitiesByStateAsync(string stateId)
+        {
+            try
+            {
+                var cities = await _studentRepository.GetCitiesByStateAsync(stateId);
+
+                if (cities == null)
+                {
+                    throw new Exception("Cidade não encontrado.");
+                }
+
+                return _mapper.Map<IEnumerable<CityDTO>>(cities);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Erro ao recuperar cidades com stateID {stateId}: {ex.Message}", ex);
+            }
+        }
+
+        public async Task<IEnumerable<StateDTO>> GetAllStatesAsync()
+        {
+            try
+            {
+                var states = await _studentRepository.GetAllStatesAsync();
+
+                return _mapper.Map<IEnumerable<StateDTO>>(states);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Erro ao recuperar os estados: {ex.Message}", ex);
+            }
+        }
+
     }
 }

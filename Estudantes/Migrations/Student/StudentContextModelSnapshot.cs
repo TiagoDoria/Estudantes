@@ -4,19 +4,16 @@ using Estudantes.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Estudantes.Migrations
+namespace Estudantes.Migrations.Student
 {
     [DbContext(typeof(StudentContext))]
-    [Migration("20250108152657_initial")]
-    partial class initial
+    partial class StudentContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1675,7 +1672,7 @@ namespace Estudantes.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("State");
+                    b.ToTable("States");
 
                     b.HasData(
                         new

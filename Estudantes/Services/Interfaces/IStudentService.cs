@@ -10,5 +10,8 @@ namespace Estudantes.Services.Interfaces
         Task<Student> AddAsync(StudentDTO student);
         Task UpdateAsync(StudentDTO student);
         Task DeleteAsync(string id);
+
+        Task<IEnumerable<StateDTO>> GetAllStatesAsync();
+        Task<IEnumerable<CityDTO>> GetCitiesByStateAsync(string stateId);
     }
 }
