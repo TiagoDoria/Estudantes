@@ -74,33 +74,27 @@ namespace Estudantes.Repositories
 
                 if (studentUpdate != null)
                 {
-                    // Desanexa a instância carregada para evitar conflito
                     _context.Entry(studentUpdate).State = EntityState.Detached;
 
-                    // Atualiza as propriedades de studentUpdate com os valores de entity
                     studentUpdate.Cpf = entity.Cpf;
                     studentUpdate.Name = entity.Name;
                     studentUpdate.Course.Name = entity.Course.Name;
                     studentUpdate.Course.GraduationDate = entity.Course.GraduationDate;
 
-                    // Atualiza o endereço
                     studentUpdate.Address.Description = entity.Address.Description;
                     studentUpdate.Address.CityId = entity.Address.CityId;
 
-                    // Atualiza a instituição educacional, se necessário
                     if (entity.Course.EducationalnstitutionId != studentUpdate.Course.EducationalnstitutionId)
                     {
                         studentUpdate.Course.EducationalnstitutionId = entity.Course.EducationalnstitutionId;
                     }
 
-                    // Marca como modificado e salva
                     _context.Entry(studentUpdate).State = EntityState.Modified;
                     await _context.SaveChangesAsync();
                 }
             }
             catch (Exception ex)
             {
-                // Trata a exceção adequadamente
                 throw new Exception("Erro ao atualizar o estudante", ex);
             }
         }
