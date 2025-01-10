@@ -71,5 +71,10 @@ namespace Estudantes.Repositories
         {
             return await _context.Cities.Where(x => x.StateId == stateId).ToListAsync();
         }
+
+        public async Task<IEnumerable<EducationalInstitution>> GetInstitutionByCityAsync(string cityId)
+        {
+            return await _context.Institutions.Where(x => x.CityId == cityId).ToListAsync();
+        }
     }
 }

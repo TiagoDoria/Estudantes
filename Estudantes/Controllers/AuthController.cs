@@ -59,7 +59,7 @@ namespace Estudantes.Controllers
 
                 if (result == true)
                 {
-                    return RedirectToAction("Login", "Auth");
+                    return RedirectToAction("Index", "Auth");
                 }
                 else
                 {

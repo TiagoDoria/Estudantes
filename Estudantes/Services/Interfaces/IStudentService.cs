@@ -13,5 +13,7 @@ namespace Estudantes.Services.Interfaces
 
         Task<IEnumerable<StateDTO>> GetAllStatesAsync();
         Task<IEnumerable<CityDTO>> GetCitiesByStateAsync(string stateId);
+        Task<IEnumerable<EducationalInstitutionDTO>> GetInstitutionByCityAsync(string cityId);
+
     }
 }

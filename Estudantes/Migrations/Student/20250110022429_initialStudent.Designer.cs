@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Estudantes.Migrations.Student
 {
     [DbContext(typeof(StudentContext))]
-    [Migration("20250109193840_initialStudent")]
+    [Migration("20250110022429_initialStudent")]
     partial class initialStudent
     {
         /// <inheritdoc />
@@ -1655,13 +1655,81 @@ namespace Estudantes.Migrations.Student
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("CityId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("EducationalInstitution");
+                    b.HasIndex("CityId");
+
+                    b.ToTable("Institutions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "1f52acb3-70a0-450b-9915-77838540215a",
+                            CityId = "1",
+                            Name = "Universidade Federal do Acre (UFAC)"
+                        },
+                        new
+                        {
+                            Id = "47bc3ac1-6b2c-43d1-b547-e9fa95422b70",
+                            CityId = "2",
+                            Name = "Faculdade da Amazônia Ocidental (FAAO)"
+                        },
+                        new
+                        {
+                            Id = "0afa190a-1d20-464a-abae-1ca6b7264ec3",
+                            CityId = "21",
+                            Name = "Universidade Federal do Amazonas (UFAM)"
+                        },
+                        new
+                        {
+                            Id = "7d62f56c-8eba-4206-bd96-0b395de6ab15",
+                            CityId = "21",
+                            Name = "Universidade do Estado do Amazonas (UEA)"
+                        },
+                        new
+                        {
+                            Id = "1f4efa45-a864-40c4-bf94-fb9ac56f2f7f",
+                            CityId = "11",
+                            Name = "Universidade Federal de Alagoas (UFAL)"
+                        },
+                        new
+                        {
+                            Id = "7e930d80-b6ee-4b84-9cf7-c91311110fb2",
+                            CityId = "12",
+                            Name = "Faculdade Integrada de Arapiraca (FIA)"
+                        },
+                        new
+                        {
+                            Id = "4f497deb-691c-40b0-816b-b09280d087cd",
+                            CityId = "31",
+                            Name = "Universidade Federal da Bahia (UFBA)"
+                        },
+                        new
+                        {
+                            Id = "ac7751ef-31e8-46f7-93d8-99a9e7f79169",
+                            CityId = "32",
+                            Name = "Universidade Estadual de Feira de Santana (UEFS)"
+                        },
+                        new
+                        {
+                            Id = "03b3a162-9c02-4868-86cb-6122faa881b7",
+                            CityId = "231",
+                            Name = "Universidade de São Paulo (USP)"
+                        },
+                        new
+                        {
+                            Id = "87aab21a-9c37-4d6d-af77-cc52988c092d",
+                            CityId = "232",
+                            Name = "Universidade Estadual de Campinas (UNICAMP)"
+                        });
                 });
 
             modelBuilder.Entity("Estudantes.Models.State", b =>
@@ -1867,6 +1935,17 @@ namespace Estudantes.Migrations.Student
                         .IsRequired();
 
                     b.Navigation("Educationalnstitution");
+                });
+
+            modelBuilder.Entity("Estudantes.Models.EducationalInstitution", b =>
+                {
+                    b.HasOne("Estudantes.Models.City", "City")
+                        .WithMany()
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("City");
                 });
 
             modelBuilder.Entity("Estudantes.Models.Student", b =>

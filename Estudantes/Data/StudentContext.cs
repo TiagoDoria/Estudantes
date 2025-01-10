@@ -15,11 +15,31 @@ namespace Estudantes.Data
         public DbSet<Address> Address { get; set; }
         public DbSet<City> Cities { get; set; }
         public DbSet<State> States { get; set; }
+        public DbSet<EducationalInstitution> Institutions { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<EducationalInstitution>().HasData(
+                 new EducationalInstitution { Id = Guid.NewGuid().ToString(), Name = "Universidade Federal do Acre (UFAC)", CityId = "1" },
+                 new EducationalInstitution { Id = Guid.NewGuid().ToString(), Name = "Faculdade da Amazônia Ocidental (FAAO)", CityId = "2" },
+
+                 new EducationalInstitution { Id = Guid.NewGuid().ToString(), Name = "Universidade Federal do Amazonas (UFAM)", CityId = "21" },
+                 new EducationalInstitution { Id = Guid.NewGuid().ToString(), Name = "Universidade do Estado do Amazonas (UEA)", CityId = "21" },
+
+                 new EducationalInstitution { Id = Guid.NewGuid().ToString(), Name = "Universidade Federal de Alagoas (UFAL)", CityId = "11" },
+                 new EducationalInstitution { Id = Guid.NewGuid().ToString(), Name = "Faculdade Integrada de Arapiraca (FIA)", CityId = "12" },
+
+                 new EducationalInstitution { Id = Guid.NewGuid().ToString(), Name = "Universidade Federal da Bahia (UFBA)", CityId = "31" },
+                 new EducationalInstitution { Id = Guid.NewGuid().ToString(), Name = "Universidade Estadual de Feira de Santana (UEFS)", CityId = "32" },
+
+                 new EducationalInstitution { Id = Guid.NewGuid().ToString(), Name = "Universidade de São Paulo (USP)", CityId = "231" },
+                 new EducationalInstitution { Id = Guid.NewGuid().ToString(), Name = "Universidade Estadual de Campinas (UNICAMP)", CityId = "232" }
+
+
+            );
 
             // Seed States and Cities
             modelBuilder.Entity<State>().HasData(

@@ -12,5 +12,6 @@ namespace Estudantes.Repositories.Interface
         Task DeleteAsync(string id);
         Task<IEnumerable<State>> GetAllStatesAsync();
         Task<IEnumerable<City>> GetCitiesByStateAsync(string stateId);
+        Task<IEnumerable<EducationalInstitution>> GetInstitutionByCityAsync(string cityId);
     }
 }

@@ -24,7 +24,14 @@ namespace Estudantes.Controllers
         {
             var states = await _studentService.GetAllStatesAsync();
             ViewBag.States = states;
-            return View(new StudentDTO());
+            var student = new StudentDTO
+            {
+                Course = new CourseDTO()
+                {
+                    Educationalnstitution = new EducationalInstitutionDTO()
+                }
+            };
+            return View(student);
         }
 
         [HttpPost]
@@ -88,10 +95,18 @@ namespace Estudantes.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpGet]
         public async Task<IActionResult> GetCitiesByState(string stateId)
         {
             var cities = await _studentService.GetCitiesByStateAsync(stateId);
             return Json(cities);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetInstitutionByCity(string cityId)
+        {
+            var inst = await _studentService.GetInstitutionByCityAsync(cityId);
+            return Json(inst);
         }
     }
 }

@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\tiago.conceicao\\Pictures\\Estudantes\\Estudantes\\Estudantes.csproj": {}
+    "C:\\Users\\DELL\\Desktop\\Estudantes\\Estudantes\\Estudantes.csproj": {}
   },
   "projects": {
-    "C:\\Users\\tiago.conceicao\\Pictures\\Estudantes\\Estudantes\\Estudantes.csproj": {
+    "C:\\Users\\DELL\\Desktop\\Estudantes\\Estudantes\\Estudantes.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\tiago.conceicao\\Pictures\\Estudantes\\Estudantes\\Estudantes.csproj",
+        "projectUniqueName": "C:\\Users\\DELL\\Desktop\\Estudantes\\Estudantes\\Estudantes.csproj",
         "projectName": "Estudantes",
-        "projectPath": "C:\\Users\\tiago.conceicao\\Pictures\\Estudantes\\Estudantes\\Estudantes.csproj",
-        "packagesPath": "C:\\Users\\tiago.conceicao\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\tiago.conceicao\\Pictures\\Estudantes\\Estudantes\\obj\\",
+        "projectPath": "C:\\Users\\DELL\\Desktop\\Estudantes\\Estudantes\\Estudantes.csproj",
+        "packagesPath": "C:\\Users\\DELL\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\DELL\\Desktop\\Estudantes\\Estudantes\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\tiago.conceicao\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\DELL\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],

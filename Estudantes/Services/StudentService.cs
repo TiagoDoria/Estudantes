@@ -115,6 +115,25 @@ namespace Estudantes.Services
             }
         }
 
+        public async Task<IEnumerable<EducationalInstitutionDTO>> GetInstitutionByCityAsync(string cityId)
+        {
+            try
+            {
+                var inst = await _studentRepository.GetInstitutionByCityAsync(cityId);
+
+                if (inst == null)
+                {
+                    throw new Exception("Instituição não encontrado.");
+                }
+
+                return _mapper.Map<IEnumerable<EducationalInstitutionDTO>>(inst);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Erro ao recuperar instituições com cityID {cityId}: {ex.Message}", ex);
+            }
+        }
+
         public async Task<IEnumerable<StateDTO>> GetAllStatesAsync()
         {
             try

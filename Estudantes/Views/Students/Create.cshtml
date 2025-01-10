@@ -6,63 +6,122 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
 
 <div class="container mt-5">
-    <h2>Cadastro de Estudante</h2>
-    <form asp-action="Create" method="post">
-        <div class="mb-3">
-            <label for="Cpf" class="form-label">CPF</label>
-            <input type="text" class="form-control" id="Cpf" name="Cpf" value="@Model.Cpf" required />
+    <div class="card">
+        <div class="card-header text-center">
+            <h2>Cadastro de Estudante</h2>
         </div>
+        <div class="card-body">
+            <form asp-action="Create" method="post">
+                <div class="mb-3">
+                    <label for="Cpf" class="form-label">CPF</label>
+                    <input type="text" class="form-control" id="Cpf" name="Cpf" value="@Model.Cpf" required />
+                </div>
 
-        <div class="mb-3">
-            <label for="State" class="form-label">Estado</label>
-            <select class="form-select" id="State" name="Address.City.StateId" required>
-                <option value="">Selecione um estado</option>
-                @foreach (var state in ViewBag.States)
-                {
-                    <option value="@state.Id">@state.Name</option>
-                }
-            </select>
+                <div class="mb-3">
+                    <label for="State" class="form-label">Estado</label>
+                    <select class="form-select" id="State" name="Address.City.StateId" required>
+                        <option value="">Selecione um estado</option>
+                        @foreach (var state in ViewBag.States)
+                        {
+                            <option value="@state.Id">@state.Name</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="City" class="form-label">Cidade</label>
+                    <select class="form-select" id="City" name="Address.CityId" required>
+                        <option value="">Selecione uma cidade</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="EducationalInstitution" class="form-label">Instituição Educacional</label>
+                    <select class="form-select" id="EducationalInstitution" name="Course.EducationalnstitutionId" required>
+                        <option value="">Selecione uma instituição</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="Description" class="form-label">Endereço</label>
+                    <input type="text" class="form-control" id="Description" name="Address.Description" value="@Model.Address?.Description" required />
+                </div>
+
+                <div class="mb-3">
+                    <label for="CourseId" class="form-label">Curso</label>
+                    <input type="text" class="form-control" id="Name" name="Course.Name" value="@Model.Course.Name" required />
+                </div>
+
+                <div class="mb-3">
+                    <label for="GraduationDate" class="form-label">Data de Graduação</label>
+                    <input type="date" class="form-control" id="GraduationDate" name="Course.GraduationDate" value="@Model.Course?.GraduationDate.ToString("yyyy-MM-dd")" required />
+                </div>
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary">Cadastrar</button>
+                </div>
+            </form>
         </div>
-
-        <div class="mb-3">
-            <label for="City" class="form-label">Cidade</label>
-            <select class="form-select" id="City" name="Address.CityId" required>
-                <option value="">Selecione uma cidade</option>
-            </select>
-        </div>
-
-        <div class="mb-3">
-            <label for="Description" class="form-label">Endereço</label>
-            <input type="text" class="form-control" id="Description" name="Address.Description" value="@Model.Address?.Description" required />
-        </div>
-
-        <div class="mb-3">
-            <label for="CourseId" class="form-label">Curso</label>
-            <input type="text" class="form-control" id="CourseId" name="CourseId" value="@Model.CourseId" required />
-        </div>
-
-        <button type="submit" class="btn btn-primary">Cadastrar</button>
-    </form>
+    </div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function () {
-        $("#State").change(function () {
-            var stateId = $(this).val();
-            $("#City").empty();
-            $("#City").append('<option value="">Carregando...</option>');
+        $('#State').on('change', function () {
+            const stateId = $(this).val(); // Obter o ID do estado selecionado
+            const cityDropdown = $('#City'); // Referência ao dropdown de cidades
+            const educationalInstitutionDropdown = $('#EducationalInstitution'); // Referência ao dropdown de instituições educacionais
 
+            // Limpa os dropdowns de cidades e instituições educacionais
+            cityDropdown.empty();
+            cityDropdown.append('<option value="">Selecione uma cidade</option>');
+            educationalInstitutionDropdown.empty();
+            educationalInstitutionDropdown.append('<option value="">Selecione uma instituição</option>');
+
+            // Verifica se um estado foi selecionado
             if (stateId) {
-                $.getJSON('/Student/GetCities', { stateId: stateId }, function (data) {
-                    $("#City").empty();
-                    $("#City").append('<option value="">Selecione uma cidade</option>');
-                    $.each(data, function (index, city) {
-                        $("#City").append('<option value="' + city.id + '">' + city.name + '</option>');
-                    });
+                $.ajax({
+                    url: '/Students/GetCitiesByState', // Substitua pelo nome correto do controller
+                    type: 'GET',
+                    data: { stateId: stateId },
+                    success: function (data) {
+                        // Preenche o dropdown de cidades com os dados retornados
+                        data.forEach(function (city) {
+                            cityDropdown.append(`<option value="${city.id}">${city.name}</option>`);
+                        });
+                    },
+                    error: function () {
+                        alert('Erro ao carregar as cidades. Por favor, tente novamente.');
+                    }
                 });
-            } else {
-                $("#City").append('<option value="">Selecione um estado primeiro</option>');
+            }
+        });
+
+        $('#City').on('change', function () {
+            const cityId = $(this).val(); // Obter o ID da cidade selecionada
+            const educationalInstitutionDropdown = $('#EducationalInstitution'); // Referência ao dropdown de instituições educacionais
+
+            // Limpa o dropdown de instituições educacionais
+            educationalInstitutionDropdown.empty();
+            educationalInstitutionDropdown.append('<option value="">Selecione uma instituição</option>');
+
+            // Verifica se uma cidade foi selecionada
+            if (cityId) {
+                $.ajax({
+                    url: '/Students/GetInstitutionByCity', // Substitua pelo nome correto do controller
+                    type: 'GET',
+                    data: { cityId: cityId },
+                    success: function (data) {
+                        // Preenche o dropdown de instituições educacionais com os dados retornados
+                        data.forEach(function (institution) {
+                            educationalInstitutionDropdown.append(`<option value="${institution.id}">${institution.name}</option>`);
+                        });
+                    },
+                    error: function () {
+                        alert('Erro ao carregar as instituições educacionais. Por favor, tente novamente.');
+                    }
+                });
             }
         });
     });
