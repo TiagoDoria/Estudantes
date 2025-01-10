@@ -14,9 +14,9 @@ namespace Estudantes.Controllers
             _studentService = studentService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var students = _studentService.GetAllAsync();
+            var students = await _studentService.GetAllAsync();
             return View(students);
         }
 
@@ -36,54 +36,56 @@ namespace Estudantes.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([FromForm] StudentDTO studentDto)
+        public async Task<IActionResult> Create([FromForm] StudentDTO studentDto)
         {
-            if (ModelState.IsValid)
-            {
-                _studentService.AddAsync(studentDto);  
-                return RedirectToAction(nameof(Index));
-            }
-            return View(studentDto);  
+            await _studentService.AddAsync(studentDto);
+            return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Update(string id)
+        [HttpGet]
+        public async Task<IActionResult> Update(string id)
         {
-            var student = _studentService.GetByIdAsync(id);
+            var student = await _studentService.GetByIdAsync(id);
             if (student == null)
             {
                 return NotFound(); 
             }
 
-            var studentDto = new StudentDTO(); // MAPEAMENTO
+            var stateId = student.Address.City.StateId;
 
-            return View(studentDto); 
+
+            var states = await _studentService.GetAllStatesAsync();
+            var cities = await _studentService.GetCitiesByStateAsync(stateId);
+            var institutions = await _studentService.GetInstitutionByCityAsync(student.Address.CityId);
+
+
+            ViewBag.States = states;
+            ViewBag.Cities = cities;
+            ViewBag.Institutions = institutions;
+
+            return View(student); 
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Update([FromForm] StudentDTO studentDto)
+        public async Task<IActionResult> Update([FromForm] StudentDTO studentDto)
         {
-            if (ModelState.IsValid)
-            {           
-                _studentService.UpdateAsync(studentDto);
+            try
+            {
+                await _studentService.UpdateAsync(studentDto);
                 return RedirectToAction(nameof(Index));
             }
-            return View(studentDto);
-        }
-
-        public IActionResult Delete(string id)
-        {
-            var student = _studentService.GetByIdAsync(id);
-            if (student == null)
+            catch
             {
-                return NotFound(); 
+                return RedirectToAction(nameof(Update));
             }
-            return View(student);
         }
 
-        [HttpPost, ActionName("Delete")]
+
+
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(string id)
+        public async Task<IActionResult> Delete(string id)
         {
             var student = _studentService.GetByIdAsync(id);
             if (student == null)
@@ -91,7 +93,7 @@ namespace Estudantes.Controllers
                 return NotFound();
             }
 
-            _studentService.DeleteAsync(id); 
+            await _studentService.DeleteAsync(id); 
             return RedirectToAction(nameof(Index));
         }
 

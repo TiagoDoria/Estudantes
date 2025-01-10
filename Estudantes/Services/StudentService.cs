@@ -20,7 +20,7 @@ namespace Estudantes.Services
         public async Task<Student> AddAsync(StudentDTO studentDto)
         {
             Student student = _mapper.Map<Student>(studentDto);
-
+            student.Id = Guid.NewGuid().ToString();
             try
             {
                 return await _studentRepository.AddAsync(student);

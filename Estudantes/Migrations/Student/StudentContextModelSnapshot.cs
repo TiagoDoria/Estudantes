@@ -1654,7 +1654,7 @@ namespace Estudantes.Migrations.Student
 
                     b.Property<string>("CityId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -1662,68 +1662,66 @@ namespace Estudantes.Migrations.Student
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CityId");
-
                     b.ToTable("Institutions");
 
                     b.HasData(
                         new
                         {
-                            Id = "1f52acb3-70a0-450b-9915-77838540215a",
+                            Id = "6773289d-8649-4ef4-bc36-33afe80e9121",
                             CityId = "1",
                             Name = "Universidade Federal do Acre (UFAC)"
                         },
                         new
                         {
-                            Id = "47bc3ac1-6b2c-43d1-b547-e9fa95422b70",
+                            Id = "17acda2b-3dcc-4cf6-a3ac-e28ba5733a76",
                             CityId = "2",
                             Name = "Faculdade da Amazônia Ocidental (FAAO)"
                         },
                         new
                         {
-                            Id = "0afa190a-1d20-464a-abae-1ca6b7264ec3",
+                            Id = "b60c41aa-e540-4a0f-ba99-43c940c5c541",
                             CityId = "21",
                             Name = "Universidade Federal do Amazonas (UFAM)"
                         },
                         new
                         {
-                            Id = "7d62f56c-8eba-4206-bd96-0b395de6ab15",
+                            Id = "5a124928-4070-45b1-879b-0bdfa9735f38",
                             CityId = "21",
                             Name = "Universidade do Estado do Amazonas (UEA)"
                         },
                         new
                         {
-                            Id = "1f4efa45-a864-40c4-bf94-fb9ac56f2f7f",
+                            Id = "0c4a0cc4-a3c0-4469-84ee-91fbb276ad40",
                             CityId = "11",
                             Name = "Universidade Federal de Alagoas (UFAL)"
                         },
                         new
                         {
-                            Id = "7e930d80-b6ee-4b84-9cf7-c91311110fb2",
+                            Id = "4fd331f5-e2b0-46a9-875c-647869469f56",
                             CityId = "12",
                             Name = "Faculdade Integrada de Arapiraca (FIA)"
                         },
                         new
                         {
-                            Id = "4f497deb-691c-40b0-816b-b09280d087cd",
+                            Id = "8198aa9d-91e3-48e2-a40f-fc29ee7b918d",
                             CityId = "31",
                             Name = "Universidade Federal da Bahia (UFBA)"
                         },
                         new
                         {
-                            Id = "ac7751ef-31e8-46f7-93d8-99a9e7f79169",
+                            Id = "a7125e72-d647-465b-a381-5bae0a36d553",
                             CityId = "32",
                             Name = "Universidade Estadual de Feira de Santana (UEFS)"
                         },
                         new
                         {
-                            Id = "03b3a162-9c02-4868-86cb-6122faa881b7",
+                            Id = "a2bbef63-02c5-451a-b50d-5e7c4db52cac",
                             CityId = "231",
                             Name = "Universidade de São Paulo (USP)"
                         },
                         new
                         {
-                            Id = "87aab21a-9c37-4d6d-af77-cc52988c092d",
+                            Id = "fbe75785-0369-44f7-9412-da3af7b5078d",
                             CityId = "232",
                             Name = "Universidade Estadual de Campinas (UNICAMP)"
                         });
@@ -1892,6 +1890,10 @@ namespace Estudantes.Migrations.Student
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AddressId");
@@ -1932,17 +1934,6 @@ namespace Estudantes.Migrations.Student
                         .IsRequired();
 
                     b.Navigation("Educationalnstitution");
-                });
-
-            modelBuilder.Entity("Estudantes.Models.EducationalInstitution", b =>
-                {
-                    b.HasOne("Estudantes.Models.City", "City")
-                        .WithMany()
-                        .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("City");
                 });
 
             modelBuilder.Entity("Estudantes.Models.Student", b =>

@@ -37,7 +37,7 @@ namespace Estudantes.Controllers
                 TempData["UserEmail"] = response.User.Email;
 
                 // Redireciona para o método Index do HomeController
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Students");
             }
 
             ModelState.AddModelError(string.Empty, "Login inválido.");

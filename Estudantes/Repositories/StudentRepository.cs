@@ -19,14 +19,18 @@ namespace Estudantes.Repositories
         {
             try
             {
+                var city = await _context.Cities.FindAsync(entity.Address.CityId); 
+                var state = await _context.States.FindAsync(city?.StateId);
+                entity.Address.City = city;  
+                entity.Address.City.State = state;
                 await _context.AddAsync(entity);
                 await _context.SaveChangesAsync();
                 return entity;
             }
-            catch (Exception)
+            catch (Exception e)
             {
 
-                throw;
+                throw new Exception(e.Message);
             }
         }
 
@@ -39,28 +43,69 @@ namespace Estudantes.Repositories
 
         public async Task<IEnumerable<Student>> GetAllAsync()
         {
-            return await _context.Students.ToListAsync();
+            return await _context.Students
+                .Include(x => x.Address)
+                .Include(x => x.Course)
+                .Include(x => x.Course.Educationalnstitution)
+                .ToListAsync();
         }
 
         public async Task<Student> GetByIdAsync(string id)
         {
-            return await _context.Students.FindAsync(id);
+            return await _context.Students
+               .Include(s => s.Address)  
+               .ThenInclude(a => a.City) 
+               .Include(s => s.Course)
+               .ThenInclude(a => a.Educationalnstitution)
+               .FirstOrDefaultAsync(s => s.Id == id);
         }
 
         public async Task UpdateAsync(Student entity)
         {
             try
             {
-                _context.Students.UpdateRange(entity);
-                await _context.SaveChangesAsync();
+                // Carrega a entidade do banco de dados
+                var studentUpdate = await _context.Students
+                    .Include(s => s.Course)
+                        .ThenInclude(c => c.Educationalnstitution) // Inclui a instituição educacional do curso
+                    .Include(s => s.Address)
+                        .ThenInclude(a => a.City) // Inclui a cidade do endereço
+                    .FirstOrDefaultAsync(s => s.Id == entity.Id);
+
+                if (studentUpdate != null)
+                {
+                    // Desanexa a instância carregada para evitar conflito
+                    _context.Entry(studentUpdate).State = EntityState.Detached;
+
+                    // Atualiza as propriedades de studentUpdate com os valores de entity
+                    studentUpdate.Cpf = entity.Cpf;
+                    studentUpdate.Name = entity.Name;
+                    studentUpdate.Course.Name = entity.Course.Name;
+                    studentUpdate.Course.GraduationDate = entity.Course.GraduationDate;
+
+                    // Atualiza o endereço
+                    studentUpdate.Address.Description = entity.Address.Description;
+                    studentUpdate.Address.CityId = entity.Address.CityId;
+
+                    // Atualiza a instituição educacional, se necessário
+                    if (entity.Course.EducationalnstitutionId != studentUpdate.Course.EducationalnstitutionId)
+                    {
+                        studentUpdate.Course.EducationalnstitutionId = entity.Course.EducationalnstitutionId;
+                    }
+
+                    // Marca como modificado e salva
+                    _context.Entry(studentUpdate).State = EntityState.Modified;
+                    await _context.SaveChangesAsync();
+                }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                // Trata a exceção adequadamente
+                throw new Exception("Erro ao atualizar o estudante", ex);
             }
-
         }
+
+
 
         public async Task<IEnumerable<State>> GetAllStatesAsync()
         {

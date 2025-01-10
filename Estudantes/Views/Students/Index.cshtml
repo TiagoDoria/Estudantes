@@ -1,5 +1,129 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model IEnumerable<Estudantes.DTOs.StudentDTO>
+
 @{
+    ViewData["Title"] = "Listagem de Estudantes";
 }
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+<div class="container mt-5">
+    <h2 class="mb-4">Listagem de Estudantes</h2>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>CPF</th>
+                <th>Nome</th>
+                <th>Curso</th>
+                <th>Instituição</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody id="studentTable">
+            @foreach (var student in Model)
+            {
+                <tr id="row-@student.Id">
+                    <td>@student.Cpf</td>
+                    <td>@student.Name</td>
+                    <td>@student.Course.Name</td>
+                    <td>@student.Course.Educationalnstitution.Name</td>
+                    <td>
+                        <!-- Botão para Editar -->
+                        <a href="@Url.Action("Update", "Students", new { id = student.Id })" class="btn btn-sm btn-primary">
+                            Editar
+                        </a>
+
+                        <!-- Botão para Deletar que abre o modal -->
+                        <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-id="@student.Id" data-name="@student.Name">
+                            Deletar
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- Token CSRF -->
+@Html.AntiForgeryToken()
+
+<!-- Modal de Confirmação -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirmar Exclusão</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Você tem certeza que deseja excluir o estudante <strong id="studentName"></strong>?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button id="confirmDeleteButton" type="button" class="btn btn-danger">Excluir</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const deleteModal = document.getElementById('deleteModal');
+        const confirmDeleteButton = document.getElementById('confirmDeleteButton');
+        let studentId = null;
+
+        // Evento ao abrir o modal
+        deleteModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            studentId = button.getAttribute('data-id');
+            const studentName = button.getAttribute('data-name');
+
+            const studentNameElement = document.getElementById('studentName');
+            studentNameElement.textContent = studentName;
+        });
+
+        // Evento ao confirmar exclusão
+        confirmDeleteButton.addEventListener('click', function () {
+            if (studentId) {
+                // Obter o token CSRF da página
+                const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+
+                // Verifique se o token foi encontrado
+                if (!token) {
+                    console.error('Token CSRF não encontrado!');
+                    return;
+                }
+
+                // Fazer requisição AJAX para deletar o estudante, enviando o ID na URL
+                fetch(`/Students/Delete/${studentId}`, {  // Inclui o ID na URL
+                    method: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': token // Adiciona o token de segurança
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // Remover a linha correspondente na tabela
+                        const row = document.getElementById(`row-${studentId}`);
+                        if (row) {
+                            row.remove();
+                        }
+
+                        // Fechar o modal
+                        const bootstrapModal = bootstrap.Modal.getInstance(deleteModal);
+                        bootstrapModal.hide();
+                    } else {
+                        return response.text().then(text => { throw new Error(text); });
+                    }
+                })
+                .catch(error => {
+                    alert("Erro ao deletar estudante: " + error.message);
+                });
+            }
+        });
+    });
+</script>

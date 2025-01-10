@@ -14,6 +14,19 @@ namespace Estudantes.Migrations.Student
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Institutions",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CityId = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Institutions", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "States",
                 columns: table => new
                 {
@@ -23,6 +36,26 @@ namespace Estudantes.Migrations.Student
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_States", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Course",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    GraduationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EducationalnstitutionId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Course", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Course_Institutions_EducationalnstitutionId",
+                        column: x => x.EducationalnstitutionId,
+                        principalTable: "Institutions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -64,50 +97,12 @@ namespace Estudantes.Migrations.Student
                 });
 
             migrationBuilder.CreateTable(
-                name: "Institutions",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CityId = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Institutions", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Institutions_Cities_CityId",
-                        column: x => x.CityId,
-                        principalTable: "Cities",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Course",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    GraduationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EducationalnstitutionId = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Course", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Course_Institutions_EducationalnstitutionId",
-                        column: x => x.EducationalnstitutionId,
-                        principalTable: "Institutions",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Students",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Cpf = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AddressId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CourseId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
@@ -125,8 +120,24 @@ namespace Estudantes.Migrations.Student
                         column: x => x.CourseId,
                         principalTable: "Course",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction, 
-                        onUpdate: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Institutions",
+                columns: new[] { "Id", "CityId", "Name" },
+                values: new object[,]
+                {
+                    { "0c4a0cc4-a3c0-4469-84ee-91fbb276ad40", "11", "Universidade Federal de Alagoas (UFAL)" },
+                    { "17acda2b-3dcc-4cf6-a3ac-e28ba5733a76", "2", "Faculdade da Amazônia Ocidental (FAAO)" },
+                    { "4fd331f5-e2b0-46a9-875c-647869469f56", "12", "Faculdade Integrada de Arapiraca (FIA)" },
+                    { "5a124928-4070-45b1-879b-0bdfa9735f38", "21", "Universidade do Estado do Amazonas (UEA)" },
+                    { "6773289d-8649-4ef4-bc36-33afe80e9121", "1", "Universidade Federal do Acre (UFAC)" },
+                    { "8198aa9d-91e3-48e2-a40f-fc29ee7b918d", "31", "Universidade Federal da Bahia (UFBA)" },
+                    { "a2bbef63-02c5-451a-b50d-5e7c4db52cac", "231", "Universidade de São Paulo (USP)" },
+                    { "a7125e72-d647-465b-a381-5bae0a36d553", "32", "Universidade Estadual de Feira de Santana (UEFS)" },
+                    { "b60c41aa-e540-4a0f-ba99-43c940c5c541", "21", "Universidade Federal do Amazonas (UFAM)" },
+                    { "fbe75785-0369-44f7-9412-da3af7b5078d", "232", "Universidade Estadual de Campinas (UNICAMP)" }
                 });
 
             migrationBuilder.InsertData(
@@ -429,23 +440,6 @@ namespace Estudantes.Migrations.Student
                     { "99", "Cáceres", "MT" }
                 });
 
-            migrationBuilder.InsertData(
-                table: "Institutions",
-                columns: new[] { "Id", "CityId", "Name" },
-                values: new object[,]
-                {
-                    { "03b3a162-9c02-4868-86cb-6122faa881b7", "231", "Universidade de São Paulo (USP)" },
-                    { "0afa190a-1d20-464a-abae-1ca6b7264ec3", "21", "Universidade Federal do Amazonas (UFAM)" },
-                    { "1f4efa45-a864-40c4-bf94-fb9ac56f2f7f", "11", "Universidade Federal de Alagoas (UFAL)" },
-                    { "1f52acb3-70a0-450b-9915-77838540215a", "1", "Universidade Federal do Acre (UFAC)" },
-                    { "47bc3ac1-6b2c-43d1-b547-e9fa95422b70", "2", "Faculdade da Amazônia Ocidental (FAAO)" },
-                    { "4f497deb-691c-40b0-816b-b09280d087cd", "31", "Universidade Federal da Bahia (UFBA)" },
-                    { "7d62f56c-8eba-4206-bd96-0b395de6ab15", "21", "Universidade do Estado do Amazonas (UEA)" },
-                    { "7e930d80-b6ee-4b84-9cf7-c91311110fb2", "12", "Faculdade Integrada de Arapiraca (FIA)" },
-                    { "87aab21a-9c37-4d6d-af77-cc52988c092d", "232", "Universidade Estadual de Campinas (UNICAMP)" },
-                    { "ac7751ef-31e8-46f7-93d8-99a9e7f79169", "32", "Universidade Estadual de Feira de Santana (UEFS)" }
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_Address_CityId",
                 table: "Address",
@@ -460,11 +454,6 @@ namespace Estudantes.Migrations.Student
                 name: "IX_Course_EducationalnstitutionId",
                 table: "Course",
                 column: "EducationalnstitutionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Institutions_CityId",
-                table: "Institutions",
-                column: "CityId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Students_AddressId",
@@ -490,10 +479,10 @@ namespace Estudantes.Migrations.Student
                 name: "Course");
 
             migrationBuilder.DropTable(
-                name: "Institutions");
+                name: "Cities");
 
             migrationBuilder.DropTable(
-                name: "Cities");
+                name: "Institutions");
 
             migrationBuilder.DropTable(
                 name: "States");
